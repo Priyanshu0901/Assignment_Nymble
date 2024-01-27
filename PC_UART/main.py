@@ -60,9 +60,12 @@ def close_serial_port(ser):
 if __name__ == "__main__":
     try:
         serial_port = initialize_serial_port()
-        
+        i=0
         data_to_write = "Hello, Serial!"
-        write_serial_data(serial_port, data_to_write)
+        while i<10:
+            write_serial_data(serial_port, data_to_write)
+            i=i+1
+            time.sleep(0.3)
         
         read_serial_data(serial_port)
     finally:
