@@ -4,13 +4,13 @@
 #include "main.h"
 #include "driver/uart.h"
 
-#define UART_1_TX       6
-#define UART_1_RX       5
+#define UART_1_TX       21
+#define UART_1_RX       20
 #define UART_1_RTS      UART_PIN_NO_CHANGE
 #define UART_1_CTS      UART_PIN_NO_CHANGE
 
-#define UART_1_RX_BUFF  500
-#define UART_1_TX_BUFF  500
+#define UART_1_RX_BUFF  200
+#define UART_1_TX_BUFF  200
 
 extern const uart_port_t uart_num;
 
