@@ -16,6 +16,15 @@
 
 #define ESP_RTC_TAG         "ESP_RTC"
 #define ESP_SPIFFS_TAG      "ESP_SPIFFS"
+#define TIMER_TAG           "ESP_TIMER"
 
+#define MTU_Size 50
+
+extern uint8_t TX_Payload[MTU_Size];
+extern uint8_t RX_Payload[MTU_Size];
+
+extern TaskHandle_t Global_Loop;
+
+extern uint8_t bytes_rec;
 
 #endif

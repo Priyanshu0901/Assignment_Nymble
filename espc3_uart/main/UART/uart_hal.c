@@ -16,19 +16,33 @@ void uart_1_init(void){
 }
 
 void write_uart_transmit(){
-    // Send the data
-    //int bytes_written = uart_write_bytes(uart_num, UART_TX_Data_un.Payload, UART_TX_DATA_LEN);
+    int bytes_written = uart_write_bytes(uart_num, TX_Payload, MTU_Size);
     
-    // if (bytes_written < 0) {
-    //     printf("UART write error\n");
-    // }
+    if (bytes_written < 0) {
+        printf("UART write error\n");
+    }
+    else if (bytes_written > 0) {
+        bytes_rec += bytes_written;
+        printf("TX data:\t");
+        print_uart(&TX_Payload);
+    }
 }
 
 void read_uart_transmit(){
-    // Read the data
-    //int bytes_read = uart_read_bytes(uart_num, UART_RX_Data_un.Payload, UART_RX_DATA_LEN,100);
+
+    int bytes_read = uart_read_bytes(uart_num, RX_Payload, MTU_Size,10);
     
-//     if (bytes_read < 0) {
-//         printf("UART read error\n");
-//     }
+    if (bytes_read < 0) {
+        printf("UART read error\n");
+    }
+    else if (bytes_read > 0) {
+        bytes_rec += bytes_read;
+        printf("RX data:\t");
+        print_uart(&RX_Payload);
+    }
+}
+
+
+void print_uart(uint8_t Payload[]){
+    puts((const char *)Payload);
 }

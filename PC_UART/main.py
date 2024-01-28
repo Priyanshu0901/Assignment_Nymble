@@ -17,27 +17,27 @@ def read_serial_data(ser):
     try:
         start_time = datetime.now()
         total_bytes_received = 0
-        while True:
-            serial_message = ser.readline()
-            try:
-                decoded_message = serial_message.decode('utf-8').strip()
-                total_bytes_received += len(serial_message)
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-                print(f"[{timestamp}] Received: {decoded_message}")
-                
-                current_time = datetime.now()
-                elapsed_time = (current_time - start_time).total_seconds()
+        serial_message = ser.readline()
+        try:
+            decoded_message = serial_message.decode('utf-8').strip()
+            total_bytes_received += len(serial_message)
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+            print(f"[{timestamp}] Received: {decoded_message}")
+            
+            current_time = datetime.now()
+            elapsed_time = (current_time - start_time).total_seconds()
 
-                if elapsed_time >= 0.5:
-                    bits_per_second = calculate_bits_per_second(start_time, total_bytes_received, elapsed_time)
-                    print(f"[{timestamp}] Bits per second: {bits_per_second:.2f} bps")
+            if elapsed_time >= 0.5:
+                bits_per_second = calculate_bits_per_second(start_time, total_bytes_received, elapsed_time)
+                print(f"[{timestamp}] Bits per second: {bits_per_second:.2f} bps")
+                start_time = current_time
+                total_bytes_received = 0
+            
+            return decoded_message
 
-                    start_time = current_time
-                    total_bytes_received = 0
-
-            except UnicodeDecodeError as e:
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-                print(f"[{timestamp}] Error decoding message: {e}. Hex representation: {serial_message.hex()}")
+        except UnicodeDecodeError as e:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+            print(f"[{timestamp}] Error decoding message: {e}. Hex representation: {serial_message.hex()}")
 
     except KeyboardInterrupt:
         print("Script terminated by user.")
@@ -60,13 +60,14 @@ def close_serial_port(ser):
 if __name__ == "__main__":
     try:
         serial_port = initialize_serial_port()
-        i=0
-        data_to_write = "Hello, Serial!"
-        while i<10:
-            write_serial_data(serial_port, data_to_write)
-            i=i+1
-            time.sleep(0.3)
         
-        read_serial_data(serial_port)
+        data = read_serial_data(serial_port)
+        if "Ready" in data : 
+            data_to_write = "Hello, Serial!"
+            while True :
+                write_serial_data(serial_port, data_to_write)
+                time.sleep(0.2)
+
+
     finally:
         close_serial_port(serial_port)
