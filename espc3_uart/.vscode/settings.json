@@ -18,6 +18,8 @@
     "idf.flashType": "UART",
     "files.associations": {
         "stdlib.h": "c",
-        "esp_err.h": "c"
+        "esp_err.h": "c",
+        "uart_mngr.h": "c",
+        "uart_hal.h": "c"
     }
 }

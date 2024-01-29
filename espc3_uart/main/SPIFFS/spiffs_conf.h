@@ -8,7 +8,7 @@
 
 extern esp_vfs_spiffs_conf_t conf;
 
-extern const char rec_file[15];
+extern const char rec_file[22];
 
 
 #endif //SPIFFS_CONF_H

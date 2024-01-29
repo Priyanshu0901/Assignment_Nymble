@@ -21,7 +21,7 @@ void init_spiffs(){
 
 void write_uart_file() {
 
-    ESP_LOGI(ESP_SPIFFS_TAG, "Opening LDS file");
+    ESP_LOGI(ESP_SPIFFS_TAG, "Reseting file");
     
     FILE* file = fopen(rec_file, "w") ;
 
@@ -30,38 +30,19 @@ void write_uart_file() {
         return;
     }
 
-    // // Write the data to the file
-    // for (int i = 0; i < LDS_BLACK_BOX_SIZE; i++) {
-    //     for (int j = 0; j < LDS_NUMBER_OF_DATA; j++) {
-    //         fprintf(file, "%u", lds_black_box[i][j]);
-    //         if (j < LDS_NUMBER_OF_DATA - 1) {
-    //             fprintf(file, ",");
-    //         }
-    //     }
-    //     fprintf(file, "\n");
-    // }
-
     fclose(file);
 }
 
 
-void read_uart_file() {
-    FILE* file = fopen(rec_file, "r");
+void append_uart_file() {
+    FILE* file = fopen(rec_file, "a+");
 
     if (file == NULL) {
-        ESP_LOGE(ESP_SPIFFS_TAG, "Failed to open file for reading");
+        ESP_LOGE(ESP_SPIFFS_TAG, "Failed to open file for append");
         return;
     }
 
-    // Read the data from the file
-    // for (int i = 0; i < LDS_BLACK_BOX_SIZE; i++) {
-    //     for (int j = 0; j < LDS_NUMBER_OF_DATA; j++) {
-    //         if (fscanf(file, "%hhu,", &lds_black_box[i][j]) != 1) {
-    //             ESP_LOGE(ESP_SPIFFS_TAG, "Error reading data from file");
-    //             break;
-    //         }
-    //     }
-    // }
+    fputs((const char *)RX_Payload,file);
 
     fclose(file);
 }

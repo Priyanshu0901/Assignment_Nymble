@@ -89,6 +89,15 @@ async def send_file(serial_port, file_path, mtu_size):
          
     await asyncio.sleep(2)
     await send_packet(serial_port, "EOF")
+    
+async def receive_data(serial_port):
+    data = await read_serial_data(serial_port)
+    
+    while "EOF" not in data:
+        data = await read_serial_data(serial_port)
+    
+    await asyncio.sleep(2)
+    await send_packet(serial_port, "ACK")
 
 async def main():
     try:
@@ -106,6 +115,8 @@ async def main():
 
         file_path = './ToSend.txt'
         await send_file(serial_port, file_path, mtu_size)
+        
+        await asyncio.ensure_future(receive_data(serial_port))
 
     finally:
         close_serial_port(serial_port)

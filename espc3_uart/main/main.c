@@ -28,10 +28,21 @@ void func(void* pvParameters){
     strcpy((char *)TX_Payload, "ACK\n");
 
     while((strcmp((char*)RX_Payload, "EOF") != 0)){
-        read_uart();
-        write_uart();    
+        if (read_uart_transmit_ret()){           
+            if(strcmp((char*)RX_Payload, "EOF") != 0)
+                append_uart_file();
+            write_uart();
+        }    
     }
 
+    send_file();
+
+    while(strcmp((char*)RX_Payload, "ACK") != 0){
+        read_uart();
+    }
+    
+    memset(TX_Payload, 0, sizeof(TX_Payload));
+    strcpy((char *)TX_Payload, "ACK\n");
     write_uart();
 
     while (true)
@@ -46,6 +57,7 @@ void app_main(void)
     uart_1_init();
     init_spiffs();
     setup_timer();
+    write_uart_file();
 
     xTaskCreate(func,"Transmit_Task",2048,NULL,tskIDLE_PRIORITY, &Global_Loop);
 

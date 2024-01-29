@@ -42,6 +42,23 @@ void read_uart_transmit(){
     }
 }
 
+int read_uart_transmit_ret(){
+    memset(RX_Payload,0,MTU_Size);
+
+    int bytes_read = uart_read_bytes(uart_num, RX_Payload, MTU_Size,10);
+    
+    if (bytes_read < 0) {
+        printf("UART read error\n");
+    }
+    else if (bytes_read > 0) {
+        bytes_rec += bytes_read;
+        printf("RX data:\t");
+        print_uart(&RX_Payload);
+        return bytes_read;
+    }
+    return 0;
+}
+
 
 void print_uart(uint8_t Payload[]){
     puts((const char *)Payload);
