@@ -10,13 +10,35 @@ uint8_t bytes_rec = 0;
 
 
 void func(void* pvParameters){
-    strcpy((char *)TX_Payload, "ESP ready\n");
-    write_uart();
-
     start_timer();
-    while(true){
+    
+    while(strcmp((char*)RX_Payload, "ACK") != 0){
         read_uart();
     }
+
+    memset(TX_Payload, 0, sizeof(TX_Payload));
+    strcpy((char *)TX_Payload, "50");
+
+    while(strcmp((char*)RX_Payload, "MTU?") != 0){
+        read_uart();
+    }
+
+    write_uart();
+    memset(TX_Payload, 0, sizeof(TX_Payload));
+    strcpy((char *)TX_Payload, "ACK\n");
+
+    while((strcmp((char*)RX_Payload, "EOF") != 0)){
+        read_uart();
+        write_uart();    
+    }
+
+    write_uart();
+
+    while (true)
+    {
+        /* code */
+    }
+    
 }
 
 void app_main(void)
